@@ -15,7 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentCategory = 'all';
     let userLocation = null;
     let isLoading = false;
-    let lastRecommendedMenu = null;
+    let recommendationHistory = [];
+    const HISTORY_SIZE = 10; 
 
     const recommendBtn = document.getElementById("recommend-btn");
     const recommendationArea = document.getElementById("recommendation-area");
@@ -82,14 +83,19 @@ document.addEventListener('DOMContentLoaded', () => {
         recommendationArea.classList.add("show");
 
         setTimeout(() => {
-            let selectedMenu = menuItems[Math.floor(Math.random() * menuItems.length)];
-            
-            if (menuItems.length > 1) {
-                while (selectedMenu === lastRecommendedMenu) {
-                    selectedMenu = menuItems[Math.floor(Math.random() * menuItems.length)];
-                }
+            let selectedMenu;
+            let attempts = 0;
+            const maxAttempts = menuItems.length * 2;
+
+            do {
+                selectedMenu = menuItems[Math.floor(Math.random() * menuItems.length)];
+                attempts++;
+            } while (recommendationHistory.includes(selectedMenu) && menuItems.length > recommendationHistory.length && attempts < maxAttempts);
+
+            recommendationHistory.push(selectedMenu);
+            if (recommendationHistory.length > HISTORY_SIZE) {
+                recommendationHistory.shift();
             }
-            lastRecommendedMenu = selectedMenu;
 
             illustrationDiv.style.display = "none";
             textP.textContent = selectedMenu;
