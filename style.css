@@ -97,7 +97,7 @@ h1 {
 }
 
 #recommendation-area.show { opacity: 1; transform: translateY(0); }
-#recommendation-text { font-family: 'Jua', sans-serif; font-size: 3rem; color: var(--text-color); margin: 10px 0; line-height: 1.2; }
+#recommendation-text { font-family: 'Jua', sans-serif; font-size: 3rem; color: var(--text-color); margin: 10px 0; line-height: 1.2; word-break: keep-all; }
 #recommendation-text.final-result { font-size: 4.8rem; color: var(--primary-color); text-shadow: 2px 2px 5px rgba(0,0,0,0.08); }
 #restaurant-search-area { margin-top: 25px; min-height: 45px; }
 
@@ -159,3 +159,23 @@ h1 {
 .close-btn:hover, .close-btn:focus { color: var(--primary-color); }
 
 .menu-card h3[data-category-title="디저트/간식 🍰"] { color: var(--dessert-color); border-bottom-color: var(--dessert-color); }
+
+/*-- Mobile Responsive Styles --*/
+@media (max-width: 768px) {
+    body { padding: 10px; }
+    .container { padding: 20px; border-radius: 20px; }
+    h1 { font-size: 2.5rem; }
+    .subtitle { font-size: 0.95rem; }
+    .categories { gap: 8px; }
+    .category-btn { padding: 8px 14px; font-size: 0.85rem; border-radius: 18px; }
+    #recommendation-area { min-height: 220px; margin-top: 20px; padding: 15px; }
+    #recommendation-text { font-size: 2.5rem; }
+    #recommendation-text.final-result { font-size: 3.5rem; }
+    .main-buttons { flex-direction: column; gap: 12px; margin-top: 25px; }
+    #recommend-btn, #view-all-btn { padding: 16px 25px; font-size: 1.2rem; border-radius: 30px; }
+    .action-btn { padding: 10px 18px; font-size: 0.9rem; }
+    #menu-board { padding: 25px; }
+    #menu-board h2 { font-size: 1.8rem; }
+    .menu-grid { grid-template-columns: 1fr; gap: 20px; }
+    .modal-content { width: 95%; }
+}
