@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const illustrationDiv = document.getElementById("recommendation-illustration");
     const textP = document.getElementById("recommendation-text");
     const restaurantSearchArea = document.getElementById("restaurant-search-area");
-    const reviewSummaryArea = document.getElementById('review-summary-area');
     const categoryBtns = document.querySelectorAll(".category-btn");
     const viewAllBtn = document.getElementById("view-all-btn");
     const modal = document.getElementById("menu-modal");
@@ -67,74 +66,54 @@ document.addEventListener('DOMContentLoaded', () => {
         
         recommendationArea.classList.remove("show");
         
-        setTimeout(() => {
-            illustrationDiv.innerHTML = '<div class="loader"></div>';
-            textP.textContent = "메뉴를 고르고 있어요...";
-            restaurantSearchArea.innerHTML = '';
-            reviewSummaryArea.innerHTML = '';
-            recommendationArea.classList.add("show");
-        }, 200);
+        illustrationDiv.innerHTML = '<div class="loader"></div>';
+        textP.textContent = "메뉴를 고르고 있어요...";
+        restaurantSearchArea.innerHTML = '';
+        recommendationArea.classList.add("show");
 
         setTimeout(() => {
             const selectedMenu = menuItems[Math.floor(Math.random() * menuItems.length)];
-            displayRecommendation(selectedMenu);
-            isLoading = false;
-        }, 1500);
-    }
-
-    function displayRecommendation(menuItem) {
-        const imageUrl = `https://source.unsplash.com/1600x900/?${encodeURIComponent(menuItem)}+food`;
-        const img = new Image();
-
-        const onImageLoad = () => {
-            illustrationDiv.innerHTML = '';
-            illustrationDiv.appendChild(img);
-            textP.textContent = menuItem;
-            createActionButtons(menuItem);
+            
+            illustrationDiv.innerHTML = '<p class="placeholder">오늘의 메뉴는? 😋</p>';
+            textP.textContent = selectedMenu;
+            createActionButtons(selectedMenu);
             recommendationArea.classList.add("show");
-        };
-        
-        img.onload = onImageLoad;
-        img.onerror = () => {
-            illustrationDiv.innerHTML = '<p class="placeholder">이미지 로딩 실패 :(</p>';
-            onImageLoad(); // Show text and buttons even if image fails
-        };
-        img.src = imageUrl;
+            
+            isLoading = false;
+        }, 500);
     }
 
     function createActionButtons(menuItem) {
-        restaurantSearchArea.innerHTML = ''; // Clear previous buttons
-        reviewSummaryArea.innerHTML = '';
+        restaurantSearchArea.innerHTML = '';
         
         const query = encodeURIComponent(menuItem);
 
-        // Map Buttons
+        const buttonsWrapper = document.createElement('div');
+        buttonsWrapper.className = 'action-buttons-wrapper';
+
+        const naverSearchButton = document.createElement('a');
+        naverSearchButton.href = `https://search.naver.com/search.naver?query=${query}`;
+        naverSearchButton.target = '_blank';
+        naverSearchButton.className = 'action-btn naver-search-btn';
+        naverSearchButton.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i> 네이버 검색`;
+        buttonsWrapper.appendChild(naverSearchButton);
+
         const maps = [
             { name: 'Google', url: `https://www.google.com/maps/search/?api=1&query=${query}${userLocation ? `&location=${userLocation.lat},${userLocation.lng}` : ''}` },
             { name: 'Naver', url: `https://map.naver.com/v5/search/${query}` },
             { name: 'Kakao', url: `https://map.kakao.com/link/search/${query}` }
         ];
 
-        const mapButtonsWrapper = document.createElement('div');
-        mapButtonsWrapper.className = 'map-buttons-wrapper';
-
         maps.forEach(map => {
             const button = document.createElement('a');
             button.href = map.url;
             button.target = '_blank';
-            button.className = 'map-btn';
+            button.className = 'action-btn map-btn';
             button.innerHTML = `<i class="fa-solid fa-map-location-dot"></i> ${map.name} 지도`;
-            mapButtonsWrapper.appendChild(button);
+            buttonsWrapper.appendChild(button);
         });
-        restaurantSearchArea.appendChild(mapButtonsWrapper);
-
-        // Review Summary Button (Disabled)
-        const summaryButton = document.createElement('button');
-        summaryButton.id = 'review-summary-btn';
-        summaryButton.disabled = true;
-        summaryButton.innerHTML = `<i class="fa-solid fa-file-lines"></i> 후기 요약 보기 (준비중)`;
-        summaryButton.title = '추후 제공될 기능입니다.';
-        reviewSummaryArea.appendChild(summaryButton);
+        
+        restaurantSearchArea.appendChild(buttonsWrapper);
     }
 
     function generateMenuBoard() {
