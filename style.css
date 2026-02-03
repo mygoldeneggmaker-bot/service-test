@@ -13,6 +13,7 @@
     --border-color: #f5ede6;
     --accent-green: #5c8d6b;
     --naver-green: #03C75A;
+    --dessert-color: #8c6eff; 
 }
 
 body {
@@ -66,7 +67,16 @@ h1 {
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
-    margin: 30px 0;
+}
+
+.meal-categories {
+    margin-bottom: 20px; 
+}
+
+.dessert-category {
+    margin-top: 10px;
+    padding-top: 20px;
+    border-top: 2px dashed var(--border-color);
 }
 
 .category-btn {
@@ -95,6 +105,25 @@ h1 {
     box-shadow: 0 4px 15px var(--glow-color);
 }
 
+.dessert-category .category-btn {
+    border-color: var(--dessert-color);
+    color: var(--dessert-color);
+}
+
+.dessert-category .category-btn:hover {
+    background-color: var(--dessert-color);
+    border-color: var(--dessert-color);
+    color: white;
+}
+
+.dessert-category .category-btn.active {
+    background-color: var(--dessert-color);
+    color: white;
+    border-color: var(--dessert-color);
+    box-shadow: 0 4px 15px rgba(140, 110, 255, 0.4);
+}
+
+
 #recommendation-area {
     opacity: 0;
     transform: translateY(10px);
@@ -104,6 +133,7 @@ h1 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-top: 20px;
 }
 
 #recommendation-area.show {
@@ -245,3 +275,8 @@ h1 {
 .menu-card p { font-size: 0.85rem; line-height: 1.6; color: #8c7b6c; margin: 0; }
 .close-btn { position: absolute; top: 10px; right: 20px; color: #aaa; font-size: 32px; font-weight: bold; cursor: pointer; transition: color 0.2s; z-index: 10; }
 .close-btn:hover, .close-btn:focus { color: var(--primary-color); }
+
+.menu-card h3:contains('디저트/간식') { /* This is a pseudo-selector, might not be universally supported */
+    color: var(--dessert-color);
+    border-bottom-color: var(--dessert-color);
+}
