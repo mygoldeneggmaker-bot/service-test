@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = document.querySelector(".close-btn");
     const menuBoard = document.getElementById("menu-board");
 
-    // 1. Get user location
     navigator.geolocation.getCurrentPosition(position => {
         userLocation = {
             lat: position.coords.latitude,
@@ -35,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
         console.warn("User location access denied. Some map features may be limited.");
     });
 
-    // 2. Event Listeners
     categoryBtns.forEach(btn => {
         btn.addEventListener("click", () => {
             categoryBtns.forEach(b => b.classList.remove("active"));
@@ -53,7 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 3. Core Functions
     function handleRecommendation() {
         if (isLoading) return;
         isLoading = true;
@@ -65,22 +62,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         recommendationArea.classList.remove("show");
-        
-        illustrationDiv.innerHTML = '<div class="loader"></div>';
-        textP.textContent = "메뉴를 고르고 있어요...";
+
+        illustrationDiv.style.display = "flex";
+        textP.textContent = "두구두구... 🥁";
+        illustrationDiv.innerHTML = '';
         restaurantSearchArea.innerHTML = '';
         recommendationArea.classList.add("show");
 
         setTimeout(() => {
             const selectedMenu = menuItems[Math.floor(Math.random() * menuItems.length)];
             
-            illustrationDiv.innerHTML = '<p class="placeholder">오늘의 메뉴는? 😋</p>';
+            illustrationDiv.style.display = "none";
             textP.textContent = selectedMenu;
             createActionButtons(selectedMenu);
-            recommendationArea.classList.add("show");
             
             isLoading = false;
-        }, 500);
+        }, 300);
     }
 
     function createActionButtons(menuItem) {
@@ -137,6 +134,5 @@ document.addEventListener('DOMContentLoaded', () => {
         menuBoard.innerHTML = boardHTML;
     }
 
-    // 4. Initial Load
     generateMenuBoard();
 });
