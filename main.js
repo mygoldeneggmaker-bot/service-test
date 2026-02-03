@@ -152,14 +152,16 @@ document.addEventListener('DOMContentLoaded', () => {
             dessert: '디저트/간식 🍰'
         };
 
-        let boardHTML = '<h2>- 전체 메뉴판 -</h2><div class="menu-grid">';
+        let boardHTML = '<h2>- 전체 메뉴판 -</h2><div class="menu-accordion">';
         for (const category in categoryMap) {
-            if (menu[category]) {
+            if (menu[category] && menu[category].length > 0) {
                 boardHTML += `
-                    <div class="menu-card">
-                        <h3 data-category-title="${categoryMap[category]}">${categoryMap[category]}</h3>
-                        <p>${menu[category].join(', ')}</p>
-                    </div>
+                    <details>
+                        <summary>${categoryMap[category]}</summary>
+                        <ul class="menu-items">
+                            ${menu[category].map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </details>
                 `;
             }
         }

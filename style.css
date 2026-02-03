@@ -54,8 +54,8 @@ header h1 {
 }
 
 .category-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 .category-btn.active {
@@ -64,6 +64,7 @@ header h1 {
     border-color: #2980b9;
 }
 
+/* Special color for Dessert/Snack category */
 .category-btn[data-category="dessert"] {
     background-color: #ffeff5;
     color: #e91e63;
@@ -112,7 +113,7 @@ header h1 {
 }
 
 #recommendation-illustration {
-    display: none; /* Initially hidden */
+    display: none; 
     font-size: 2.5rem;
 }
 
@@ -148,8 +149,8 @@ header h1 {
 
 #recommend-btn:hover {
     background-color: #27ae60;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 #view-all-btn {
@@ -159,26 +160,21 @@ header h1 {
 
 #view-all-btn:hover {
     background-color: #8e44ad;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(155, 89, 182, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .naver-search-btn {
     background-color: #1EC800;
     color: white;
 }
-.naver-search-btn:hover {
-    background-color: #1DBF00;
-}
+.naver-search-btn:hover { background-color: #1DBF00; }
 
 .map-btn {
     background-color: #f1c40f;
     color: #2c3e50;
 }
-.map-btn:hover {
-    background-color: #f39c12;
-}
-
+.map-btn:hover { background-color: #f39c12; }
 
 /* Modal Styles */
 .modal {
@@ -215,9 +211,7 @@ header h1 {
     cursor: pointer;
 }
 
-.close-btn:hover, .close-btn:focus {
-    color: black;
-}
+.close-btn:hover, .close-btn:focus { color: black; }
 
 #menu-board h2 {
     font-family: 'Jua', sans-serif;
@@ -227,66 +221,74 @@ header h1 {
     margin-bottom: 1em;
 }
 
-.menu-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-}
-
-.menu-card {
+/* NEW Accordion Menu Styles */
+.menu-accordion details {
     background: #f9f9f9;
+    border-radius: 8px;
+    margin-bottom: 10px;
     border: 1px solid #eee;
-    border-radius: 10px;
-    padding: 20px;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: background-color 0.3s;
+}
+.menu-accordion details[open] {
+    background-color: #fff;
 }
 
-.menu-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-}
-
-.menu-card h3 {
+.menu-accordion summary {
     font-family: 'Jua', sans-serif;
     font-size: 1.5rem;
     color: #3498db;
-    margin-top: 0;
-    border-bottom: 2px solid #ecf0f1;
-    padding-bottom: 10px;
-    margin-bottom: 15px;
+    padding: 15px 20px;
+    cursor: pointer;
+    list-style: none; /* Hide default marker */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.menu-card p {
+.menu-accordion summary::-webkit-details-marker { display: none; }
+
+.menu-accordion summary::after {
+    content: '+';
+    font-size: 1.8rem;
+    color: #3498db;
+    transition: transform 0.3s;
+}
+
+.menu-accordion details[open] summary::after {
+    transform: rotate(45deg);
+}
+
+.menu-accordion .menu-items {
+    padding: 0 20px 20px 20px;
     font-size: 1rem;
-    line-height: 1.6;
+    line-height: 1.7;
     color: #555;
     word-break: keep-all;
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 15px;
+}
+
+.menu-accordion .menu-items li {
+    background: #ecf0f1;
+    padding: 5px 12px;
+    border-radius: 15px;
+    color: #34495e;
 }
 
 /* Animations */
-@keyframes fadeIn {
-    from {opacity: 0;} to {opacity: 1;}
-}
-@keyframes slideIn {
-    from {transform: translateY(-50px);} to {transform: translateY(0);}
-}
+@keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+@keyframes slideIn { from {transform: translateY(-50px);} to {transform: translateY(0);} }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .main-container {
-        padding: 1.5em;
-    }
-    header h1 {
-        font-size: 2.5em;
-    }
+    .main-container { padding: 1.5em; }
+    header h1 { font-size: 2.5em; }
     .category-btn, #recommend-btn, #view-all-btn, .action-btn {
         padding: 12px 24px;
         font-size: 1em;
     }
-    #recommendation-text {
-        font-size: 1.8em;
-    }
-    #recommendation-text.final-result {
-        font-size: 2.5em;
-    }
+    #recommendation-text { font-size: 1.8em; }
+    #recommendation-text.final-result { font-size: 2.5em; }
 }
