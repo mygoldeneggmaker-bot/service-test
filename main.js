@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
         japanese: ["초밥", "라멘", "돈까스", "우동", "야끼소바", "오코노미야끼", "텐동", "가츠동", "규동", "사케동", "장어덮밥", "소바", "스키야키", "야키토리", "타코야끼", "모밀", "나베", "함박스테이크", "카레라이스", "된장라면", "마제소바", "오야코동", "부타동", "히츠마부시", "몬자야키", "가라아게", "고로케", "메밀소바", "나가사키 짬뽕", "양갈비"],
         chinese: ["짜장면", "짬뽕", "탕수육", "마라탕", "양꼬치", "꿔바로우", "마파두부", "유린기", "깐풍기", "고추잡채", "동파육", "어향가지", "토마토계란볶음", "울면", "기스면", "중국냉면", "마라샹궈", "훠궈", "볶음밥", "잡채밥", "우육면", "탄탄면", "지삼선", "난자완스", "라조기", "해파리냉채", "멘보샤", "크림새우", "누룽지탕", "유산슬", "딤섬"],
         asian: ["쌀국수", "팟타이", "나시고랭", "분짜", "반미", "똠얌꿍", "월남쌈", "푸팟퐁커리", "카오팟", "쏨땀", "반세오", "껌승", "미고랭", "락사", "사테", "그린 커리", "레드 커리", "파인애플 볶음밥", "모닝글로리 볶음", "얌운센", "탄두리 치킨", "치킨 마크니", "팔락 파니르", "사모사", "난", "달프라이", "샤브샤브"],
-        european: ["파스타", "피자", "리조또", "라자냐", "뇨끼", "봉골레 파스타", "까르보나라", "알리오 올리오", "로제 파스타", "토마토 스파게티", "필라프", "그라탕", "빠에야", "감바스 알 아히요", "하몽", "또르띠야 에스파뇰라", '"피쉬 앤 칩스"', "잠봉뵈르", "슈니첼", "굴라쉬", "수블라키", "프레첼"],
+        european: ["파스타", "피자", "리조또", "라자냐", "뇨끼", "봉골레 파스타", "까르보나라", "알리오 올리오", "로제 파스타", "토마토 스파게티", "필라프", "그라탕", "빠에야", "감바스 알 아히요", "하몽", "또르띠야 에스파뇰라", "피쉬 앤 칩스", "잠봉뵈르", "슈니첼", "굴라쉬", "수블라키", "프레첼"],
         american: ["스테이크", "햄버거", "클럽 샌드위치", "에그 베네딕트", "프렌치 토스트", "수비드 목살 스테이크", "대파 크림치즈 베이글", "브리스킷", "바베큐 플래터", "미트볼 스파게티", "오믈렛", "포케", "샐러드"],
         latin_american: ["세비체", "로모 살타도", "아사도", "엠파나다", "페이조아다", "슈하스코", "아레파", "반데하 파이사", "타코", "부리또", "퀘사디아", "엔칠라다", "나초", "파히타", "칠리 콘 카르네", "과카몰리", "치미창가"],
         middle_eastern: ["케밥", "후무스", "팔라펠", "타불레", "샥슈카", "피타 브레드", "무사카", "코프타"],
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             console.log(`Selected menu: ${selectedMenu}`);
             const img = document.createElement('img');
-            const imageUrl = `https://source.unsplash.com/featured/?${encodeURIComponent(selectedMenu)}&t=${new Date().getTime()}`;
+            const imageUrl = `https://source.unsplash.com/400x300/?${encodeURIComponent(selectedMenu)}&t=${new Date().getTime()}`;
             console.log(`Image URL: ${imageUrl}`);
             img.src = imageUrl;
             img.alt = selectedMenu;
@@ -111,7 +111,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 illustrationDiv.style.display = "flex";
                 textP.textContent = selectedMenu;
                 textP.classList.add("final-result");
-                createActionButtons(selectedMenu);
+                setTimeout(() => {
+                    createActionButtons(selectedMenu);
+                }, 200);
                 isLoading = false;
             };
             img.onerror = (err) => {
@@ -119,7 +121,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 illustrationDiv.style.display = "none";
                 textP.textContent = selectedMenu;
                 textP.classList.add("final-result");
-                createActionButtons(selectedMenu);
+                setTimeout(() => {
+                    createActionButtons(selectedMenu);
+                }, 200);
                 isLoading = false;
             };
         }, 300);
