@@ -125,7 +125,15 @@ header h1 {
 }
 
 /* Action & Main Buttons */
-.main-buttons, .action-buttons-wrapper {
+.main-buttons {
+    margin-top: 2em;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.action-buttons-wrapper {
     margin-top: 2em;
     display: flex;
     justify-content: center;
