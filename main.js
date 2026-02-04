@@ -97,12 +97,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 recommendationHistory.shift();
             }
 
-            illustrationDiv.style.display = "none";
-            textP.textContent = selectedMenu;
-            textP.classList.add("final-result");
-            createActionButtons(selectedMenu);
-            
-            isLoading = false;
+            illustrationDiv.style.display = "flex";
+            const img = document.createElement('img');
+            img.src = `https://source.unsplash.com/featured/?${encodeURIComponent(selectedMenu)}+food`;
+            img.alt = selectedMenu;
+            img.onload = () => {
+                illustrationDiv.innerHTML = '';
+                illustrationDiv.appendChild(img);
+                textP.textContent = selectedMenu;
+                textP.classList.add("final-result");
+                createActionButtons(selectedMenu);
+                isLoading = false;
+            };
+            img.onerror = () => {
+                illustrationDiv.style.display = "none";
+                textP.textContent = selectedMenu;
+                textP.classList.add("final-result");
+                createActionButtons(selectedMenu);
+                isLoading = false;
+            };
         }, 300);
     }
 
