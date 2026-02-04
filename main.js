@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             console.log(`Selected menu: ${selectedMenu}`);
             const img = document.createElement('img');
-            const imageUrl = `https://source.unsplash.com/featured/?${encodeURIComponent(selectedMenu)}+food`;
+            const imageUrl = `https://source.unsplash.com/featured/?${encodeURIComponent(selectedMenu)}&t=${new Date().getTime()}`;
             console.log(`Image URL: ${imageUrl}`);
             img.src = imageUrl;
             img.alt = selectedMenu;
@@ -114,8 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 createActionButtons(selectedMenu);
                 isLoading = false;
             };
-            img.onerror = () => {
-                console.error("Image failed to load");
+            img.onerror = (err) => {
+                console.error("Image failed to load", err);
                 illustrationDiv.style.display = "none";
                 textP.textContent = selectedMenu;
                 textP.classList.add("final-result");
