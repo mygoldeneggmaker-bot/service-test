@@ -99,33 +99,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
             console.log(`Selected menu: ${selectedMenu}`);
             const img = document.createElement('img');
-            const imageUrl = `https://source.unsplash.com/400x300/?${encodeURIComponent(selectedMenu)}&t=${new Date().getTime()}`;
-            console.log(`Image URL: ${imageUrl}`);
+            let imageUrl = `https://source.unsplash.com/400x300/?${encodeURIComponent(selectedMenu)}&t=${new Date().getTime()}`;
+            console.log(`Attempting to load image for: ${selectedMenu} from URL: ${imageUrl}`);
             img.src = imageUrl;
             img.alt = selectedMenu;
 
-            img.onload = () => {
+            const handleImageLoad = () => {
                 console.log("Image loaded successfully");
                 illustrationDiv.innerHTML = '';
                 illustrationDiv.appendChild(img);
-                illustrationDiv.style.display = "flex";
+                illustrationDiv.style.display = "flex"; // Ensure it's a flex container for centering
                 textP.textContent = selectedMenu;
                 textP.classList.add("final-result");
                 setTimeout(() => {
                     createActionButtons(selectedMenu);
-                }, 200);
+                }, 500); // Increased delay to 0.5 seconds
                 isLoading = false;
             };
-            img.onerror = (err) => {
-                console.error("Image failed to load", err);
-                illustrationDiv.style.display = "none";
-                textP.textContent = selectedMenu;
-                textP.classList.add("final-result");
-                setTimeout(() => {
-                    createActionButtons(selectedMenu);
-                }, 200);
-                isLoading = false;
+
+            const handleImageError = (err) => {
+                console.error(`Image for '${selectedMenu}' failed to load from ${imageUrl}. Trying generic 'food' image.`, err);
+                // Fallback to a generic food image
+                const genericImageUrl = `https://source.unsplash.com/400x300/?food&t=${new Date().getTime()}`;
+                img.src = genericImageUrl; // Attempt to load a generic food image
+                img.onload = () => { // If generic image loads
+                    console.log("Generic food image loaded successfully");
+                    illustrationDiv.innerHTML = '';
+                    illustrationDiv.appendChild(img);
+                    illustrationDiv.style.display = "flex";
+                    textP.textContent = selectedMenu;
+                    textP.classList.add("final-result");
+                    setTimeout(() => {
+                        createActionButtons(selectedMenu);
+                    }, 500); // Increased delay
+                    isLoading = false;
+                };
+                img.onerror = (genericErr) => { // If generic image also fails
+                    console.error("Generic food image also failed to load. No image will be displayed.", genericErr);
+                    illustrationDiv.style.display = "none";
+                    textP.textContent = selectedMenu;
+                    textP.classList.add("final-result");
+                    setTimeout(() => {
+                        createActionButtons(selectedMenu);
+                    }, 500); // Increased delay
+                    isLoading = false;
+                };
             };
+            img.onload = handleImageLoad;
+            img.onerror = handleImageError;
         }, 300);
     }
 
