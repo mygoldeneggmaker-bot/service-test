@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         recommendationArea.classList.remove("show");
         textP.classList.remove("final-result");
 
-        illustrationDiv.style.display = "flex";
+        illustrationDiv.style.display = "none";
         textP.textContent = "두구두구... 🥁";
         illustrationDiv.innerHTML = '';
         restaurantSearchArea.innerHTML = '';
@@ -97,19 +97,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 recommendationHistory.shift();
             }
 
-            illustrationDiv.style.display = "flex";
+            console.log(`Selected menu: ${selectedMenu}`);
             const img = document.createElement('img');
-            img.src = `https://source.unsplash.com/featured/?${encodeURIComponent(selectedMenu)}+food`;
+            const imageUrl = `https://source.unsplash.com/featured/?${encodeURIComponent(selectedMenu)}+food`;
+            console.log(`Image URL: ${imageUrl}`);
+            img.src = imageUrl;
             img.alt = selectedMenu;
+
             img.onload = () => {
+                console.log("Image loaded successfully");
                 illustrationDiv.innerHTML = '';
                 illustrationDiv.appendChild(img);
+                illustrationDiv.style.display = "flex";
                 textP.textContent = selectedMenu;
                 textP.classList.add("final-result");
                 createActionButtons(selectedMenu);
                 isLoading = false;
             };
             img.onerror = () => {
+                console.error("Image failed to load");
                 illustrationDiv.style.display = "none";
                 textP.textContent = selectedMenu;
                 textP.classList.add("final-result");
