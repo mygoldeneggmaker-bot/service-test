@@ -1,60 +1,80 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>오늘 뭐 먹지? | 메뉴 추천 & 주변 맛집</title>
-    <meta name="google-adsense-account" content="ca-pub-9640874055054012">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Jua&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9640874055054012"
-     crossorigin="anonymous"></script>
-</head>
-<body>
+    <meta name="google-adsense-account" content="ca-pub-9640874055054012" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Jua&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media = 'all'"
+    />
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9640874055054012"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
     <div class="main-container">
-        <div class="container recommendation-container">
-            <header>
-                <h1>오늘 뭐 먹지?</h1>
-                <p class="subtitle">버튼 하나로 확인하는 오늘의 메뉴와 주변 맛집</p>
-            </header>
-            <div class="categories meal-categories">
-                <button class="category-btn active" data-category="all">전체</button>
-                <button class="category-btn" data-category="korean">한식</button>
-                <button class="category-btn" data-category="japanese">일식</button>
-                <button class="category-btn" data-category="chinese">중식</button>
-                <button class="category-btn" data-category="asian">아시안</button>
-                <button class="category-btn" data-category="european">유러피안</button>
-                <button class="category-btn" data-category="american">아메리칸</button>
-                <button class="category-btn" data-category="latin_american">남미</button>
-                <button class="category-btn" data-category="middle_eastern">중동</button>
-                <button class="category-btn" data-category="dessert">디저트/간식 🍰</button>
-            </div>
-            
-            <div id="recommendation-area">
-                <div id="recommendation-illustration"></div>
-                <p id="recommendation-text"></p>
-                <div id="restaurant-search-area"></div>
-            </div>
-
-            <div class="main-buttons">
-                <button id="recommend-btn">메뉴 추천! 🍱</button>
-                <button id="view-all-btn">전체 메뉴 보기 📖</button>
-            </div>
+      <div class="container recommendation-container">
+        <header>
+          <h1>오늘 뭐 먹지?</h1>
+          <p class="subtitle">버튼 하나로 확인하는 오늘의 메뉴와 주변 맛집</p>
+        </header>
+        <div class="categories meal-categories">
+          <button class="category-btn active" data-category="all">전체</button>
+          <button class="category-btn" data-category="korean">한식</button>
+          <button class="category-btn" data-category="japanese">일식</button>
+          <button class="category-btn" data-category="chinese">중식</button>
+          <button class="category-btn" data-category="asian">아시안</button>
+          <button class="category-btn" data-category="european">
+            유러피안
+          </button>
+          <button class="category-btn" data-category="american">
+            아메리칸
+          </button>
+          <button class="category-btn" data-category="latin_american">
+            남미
+          </button>
+          <button class="category-btn" data-category="middle_eastern">
+            중동
+          </button>
+          <button class="category-btn" data-category="dessert">
+            디저트/간식 🍰
+          </button>
         </div>
+
+        <div id="recommendation-area">
+          <div id="recommendation-illustration"></div>
+          <p id="recommendation-text"></p>
+          <div id="restaurant-search-area"></div>
+        </div>
+
+        <div class="main-buttons">
+          <button id="recommend-btn">메뉴 추천! 🍱</button>
+          <button id="view-all-btn">전체 메뉴 보기 📖</button>
+        </div>
+      </div>
     </div>
 
     <!-- Menu Board Modal -->
     <div id="menu-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <div id="menu-board" class="container"></div>
-        </div>
+      <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <div id="menu-board" class="container"></div>
+      </div>
     </div>
 
     <script src="main.js"></script>
-</body>
+  </body>
 </html>
