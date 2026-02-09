@@ -11,6 +11,7 @@ A web application that recommends a random food menu item and helps users find n
 - **Restaurant Search:** Provides links to search for the recommended menu item on Naver, and open maps (Google, Naver, Kakao).
 - **View All Menus:** A modal window that displays all available menu items.
 - **Image Display:** Shows an image of the recommended food item from Unsplash.
+- **Google AdSense Integration:** Implemented Google AdSense to display advertisements, utilizing the provided `ads.txt` and AdSense script in `index.html`.
 
 ## Current Task: Add Images to Recommendations
 
