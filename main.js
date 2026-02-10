@@ -73,9 +73,6 @@ document.addEventListener("DOMContentLoaded", () => {
       "파닭",
       "떡볶이",
       "순대",
-      "튀김",
-      "어묵",
-      "핫도그",
     ],
     japanese: [
       "초밥",
@@ -239,6 +236,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "무사카",
       "코프타",
     ],
+    bunsik: ["떡볶이", "순대", "튀김", "어묵", "핫도그", "김밥", "라면", "떡꼬치", "만두"],
     dessert: [
       "케이크",
       "마카롱",
@@ -272,7 +270,6 @@ document.addEventListener("DOMContentLoaded", () => {
       "뻥튀기",
       "달고나",
       "츄러스",
-      "떡꼬치",
       "알감자",
       "인절미",
       "꿀떡",
@@ -284,32 +281,6 @@ document.addEventListener("DOMContentLoaded", () => {
       "스무디",
       "에이드",
       "과일주스",
-      "해물파전",
-      "김밥",
-      "만두",
-      "떡볶이",
-      "순대",
-      "튀김",
-      "어묵",
-      "핫도그",
-      "파전",
-      "김치전",
-      "감자전",
-      "타코야끼",
-      "가라아게",
-      "고로케",
-      "멘보샤",
-      "크림새우",
-      "딤섬",
-      "피자",
-      "프레첼",
-      "프렌치 토스트",
-      "오믈렛",
-      "나초",
-      "엠파나다",
-      "아레파",
-      "타코",
-      "퀘사디아",
     ],
   };
 
@@ -345,6 +316,8 @@ document.addEventListener("DOMContentLoaded", () => {
     아이스크림: "ice cream",
     빙수: "bingsu korean shaved ice",
     와플: "waffle",
+    떡볶이: "tteokbokki spicy rice cakes",
+    김밥: "gimbap korean seaweed rice roll",
   };
 
   let currentCategory = "all";
@@ -359,9 +332,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const recommendBtn = document.getElementById("recommend-btn");
   const recommendationArea = document.getElementById("recommendation-area");
-  const illustrationDiv = document.getElementById("recommendation-illustration");
+  const illustrationDiv = document.getElementById(
+    "recommendation-illustration"
+  );
   const textP = document.getElementById("recommendation-text");
-  const restaurantSearchArea = document.getElementById("restaurant-search-area");
+  const restaurantSearchArea = document.getElementById(
+    "restaurant-search-area"
+  );
   const categoryBtns = document.querySelectorAll(".category-btn");
   const viewAllBtn = document.getElementById("view-all-btn");
   const modal = document.getElementById("menu-modal");
@@ -376,8 +353,10 @@ document.addEventListener("DOMContentLoaded", () => {
       };
     },
     () => {
-      console.warn("User location access denied. Some map features may be limited.");
-    },
+      console.warn(
+        "User location access denied. Some map features may be limited."
+      );
+    }
   );
 
   categoryBtns.forEach((btn) => {
@@ -410,7 +389,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Unsplash Source URL (API 키 불필요)
     const timestamp = Date.now(); // 캐시 방지
-    const imgUrl = `https://source.unsplash.com/480x280/?${encodeURIComponent(searchTerm)}&t=${timestamp}`;
+    const imgUrl = `https://source.unsplash.com/480x280/?${encodeURIComponent(
+      searchTerm
+    )}&t=${timestamp}`;
 
     const img = new Image();
 
@@ -448,7 +429,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     let availableMenuItems = menuItems.filter(
-      (item) => !recommendationHistory[currentCategory].includes(item),
+      (item) => !recommendationHistory[currentCategory].includes(item)
     );
 
     if (availableMenuItems.length === 0) {
@@ -468,7 +449,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     setTimeout(() => {
       const selectedMenu =
-        availableMenuItems[Math.floor(Math.random() * availableMenuItems.length)];
+        availableMenuItems[
+          Math.floor(Math.random() * availableMenuItems.length)
+        ];
 
       recommendationHistory[currentCategory].push(selectedMenu);
 
@@ -506,7 +489,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const maps = [
       {
         name: "Google",
-        url: `https://www.google.com/maps/search/?api=1&query=${query}${userLocation ? `&location=${userLocation.lat},${userLocation.lng}` : ""}`,
+        url: `https://www.google.com/maps/search/?api=1&query=${query}${
+          userLocation ? `&location=${userLocation.lat},${userLocation.lng}` : ""
+        }`,
       },
       { name: "Naver", url: `https://map.naver.com/v5/search/${query}` },
       { name: "Kakao", url: `https://map.kakao.com/link/search/${query}` },
@@ -534,6 +519,7 @@ document.addEventListener("DOMContentLoaded", () => {
       american: "아메리칸",
       latin_american: "남미",
       middle_eastern: "중동",
+      bunsik: "분식",
       dessert: "디저트/간식 🍰",
     };
 
