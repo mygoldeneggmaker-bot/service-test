@@ -313,6 +313,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ],
   };
 
+  // ✅ 메뉴명 → 영어 검색어 매핑 (Unsplash 검색 정확도 향상)
   const menuSearchTerms = {
     비빔밥: "bibimbap korean rice bowl",
     김치찌개: "kimchi stew korean",
@@ -357,7 +358,7 @@ document.addEventListener("DOMContentLoaded", () => {
   recommendationHistory["all"] = [];
 
   const recommendBtn = document.getElementById("recommend-btn");
-  const recommendationArea = document.getElementById("recommendation-area
+  const recommendationArea = document.getElementById("recommendation-area");
   const illustrationDiv = document.getElementById("recommendation-illustration");
   const textP = document.getElementById("recommendation-text");
   const restaurantSearchArea = document.getElementById("restaurant-search-area");
@@ -396,15 +397,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // ✅ Unsplash 이미지 로드 함수
   async function showFoodImage(menuName) {
+    // 영어 검색어가 있으면 사용, 없으면 메뉴 이름 + food 로 검색
     const searchTerm = menuSearchTerms[menuName]
       ? menuSearchTerms[menuName]
       : `${menuName} food`;
 
+    // 로딩 상태 표시
     illustrationDiv.style.display = "flex";
     illustrationDiv.innerHTML = `<div class="img-loading">🔍 사진 불러오는 중...</div>`;
 
-    const timestamp = Date.now();
+    // Unsplash Source URL (API 키 불필요)
+    const timestamp = Date.now(); // 캐시 방지
     const imgUrl = `https://source.unsplash.com/480x280/?${encodeURIComponent(searchTerm)}&t=${timestamp}`;
 
     const img = new Image();
@@ -416,6 +421,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     img.onerror = () => {
+      // 이미지 로드 실패 시 이모지로 대체
       illustrationDiv.innerHTML = `<div class="img-fallback">🍽️</div>`;
     };
 
@@ -453,6 +459,7 @@ document.addEventListener("DOMContentLoaded", () => {
     recommendationArea.classList.remove("show");
     textP.classList.remove("final-result");
 
+    // ✅ 이미지 초기화
     illustrationDiv.style.display = "none";
     illustrationDiv.innerHTML = "";
     textP.textContent = "두구두구... 🥁";
@@ -468,6 +475,7 @@ document.addEventListener("DOMContentLoaded", () => {
       textP.textContent = selectedMenu;
       textP.classList.add("final-result");
 
+      // ✅ 이미지 불러오기
       showFoodImage(selectedMenu);
 
       const buttonsWrapper = createActionButtons(selectedMenu);
