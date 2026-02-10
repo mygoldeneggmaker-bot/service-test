@@ -114,7 +114,7 @@ header h1 {
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* ✅ 음식 이미지 영역 */
+/* 음식 이미지 영역 */
 #recommendation-illustration {
   display: none;
   width: 100%;
@@ -128,7 +128,7 @@ header h1 {
   background: #f0f0f0;
 }
 
-/* ✅ 음식 이미지 */
+/* 음식 이미지 */
 #recommendation-illustration .food-img {
   width: 100%;
   max-width: 480px;
@@ -139,7 +139,7 @@ header h1 {
   animation: imgFadeIn 0.5s ease;
 }
 
-/* ✅ 이미지 로딩 중 텍스트 */
+/* 이미지 로딩 중 텍스트 */
 #recommendation-illustration .img-loading {
   font-size: 1em;
   color: #999;
@@ -147,7 +147,7 @@ header h1 {
   animation: pulse 1s infinite;
 }
 
-/* ✅ 이미지 로드 실패 시 이모지 */
+/* 이미지 로드 실패 시 이모지 */
 #recommendation-illustration .img-fallback {
   font-size: 5em;
   padding: 0.3em;
@@ -355,13 +355,11 @@ header h1 {
   to { transform: translateY(0); }
 }
 
-/* ✅ 이미지 페이드인 애니메이션 */
 @keyframes imgFadeIn {
   from { opacity: 0; transform: scale(0.97); }
   to { opacity: 1; transform: scale(1); }
 }
 
-/* ✅ 로딩 펄스 애니메이션 */
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.4; }
