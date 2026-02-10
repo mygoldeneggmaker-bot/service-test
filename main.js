@@ -378,41 +378,62 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ✅ Unsplash 이미지 로드 함수
   async function showFoodImage(menuName) {
-    // 영어 검색어가 있으면 사용, 없으면 메뉴 이름 + food 로 검색
     const searchTerm = menuSearchTerms[menuName]
       ? menuSearchTerms[menuName]
       : `${menuName} food`;
 
-    // 로딩 상태 표시
     illustrationDiv.style.display = "flex";
     illustrationDiv.innerHTML = `<div class="img-loading">🔍 사진 불러오는 중...</div>`;
 
-    // Unsplash Source URL (API 키 불필요)
-    const timestamp = Date.now(); // 캐시 방지
-    const imgUrl = `https://source.unsplash.com/480x280/?${encodeURIComponent(
-      searchTerm
-    )}&t=${timestamp}`;
+    try {
+      const response = await fetch(
+        `https://api.unsplash.com/search/photos?query=${encodeURIComponent(
+          searchTerm
+        )}&per_page=1&orientation=landscape`,
+        {
+          headers: {
+            Authorization: `Client-ID ${UNSPLASH_API_KEY}`,
+          },
+        }
+      );
 
-    const img = new Image();
+      if (!response.ok) {
+        throw new Error(`Unsplash API Error: ${response.statusText}`);
+      }
 
-    img.onload = () => {
-      illustrationDiv.innerHTML = "";
-      illustrationDiv.appendChild(img);
-      img.classList.add("food-img");
-    };
+      const data = await response.json();
 
-    img.onerror = () => {
-      // 이미지 로드 실패 시 이모지로 대체
+      if (data.results && data.results.length > 0) {
+        const imgUrl = data.results[0].urls.regular;
+        const photographer = data.results[0].user.name;
+        const photographerUrl = data.results[0].user.links.html;
+
+        const img = new Image();
+        img.onload = () => {
+          illustrationDiv.innerHTML = `
+            <img src="${imgUrl}" alt="${menuName}" class="food-img">
+            <div class="photographer-credit">
+              Photo by <a href="${photographerUrl}?utm_source=mygoldeneggmaker_bot&utm_medium=referral" target="_blank">${photographer}</a> on <a href="https://unsplash.com/?utm_source=mygoldeneggmaker_bot&utm_medium=referral" target="_blank">Unsplash</a>
+            </div>
+          `;
+        };
+        img.onerror = () => {
+          illustrationDiv.innerHTML = `<div class="img-fallback">🍽️</div>`;
+        };
+        img.src = imgUrl;
+      } else {
+        illustrationDiv.innerHTML = `<div class="img-fallback">🍽️</div>`;
+      }
+    } catch (error) {
+      console.error(error);
       illustrationDiv.innerHTML = `<div class="img-fallback">🍽️</div>`;
-    };
-
-    img.src = imgUrl;
-    img.alt = menuName;
+    }
   }
 
   function handleRecommendation() {
     if (isLoading) return;
     isLoading = true;
+    recommendBtn.disabled = true; // 버튼 비활성화
 
     let menuItems;
     if (currentCategory === "all") {
@@ -425,6 +446,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!menuItems || menuItems.length === 0) {
       isLoading = false;
+      recommendBtn.disabled = false; // 버튼 활성화
       return;
     }
 
@@ -440,7 +462,6 @@ document.addEventListener("DOMContentLoaded", () => {
     recommendationArea.classList.remove("show");
     textP.classList.remove("final-result");
 
-    // ✅ 이미지 초기화
     illustrationDiv.style.display = "none";
     illustrationDiv.innerHTML = "";
     textP.textContent = "두구두구... 🥁";
@@ -458,7 +479,6 @@ document.addEventListener("DOMContentLoaded", () => {
       textP.textContent = selectedMenu;
       textP.classList.add("final-result");
 
-      // ✅ 이미지 불러오기
       showFoodImage(selectedMenu);
 
       const buttonsWrapper = createActionButtons(selectedMenu);
@@ -467,6 +487,7 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(() => {
         buttonsWrapper.classList.add("show");
         isLoading = false;
+        recommendBtn.disabled = false; // 버튼 활성화
       }, 300);
     }, 300);
   }
