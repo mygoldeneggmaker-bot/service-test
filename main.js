@@ -67,8 +67,8 @@ document.addEventListener("DOMContentLoaded", () => {
     ],
   };
 
-  // ✅ [수정 1] UNSPLASH_API_KEY는 config.js에서 선언되므로 여기서 const 선언 제거
-  // config.js: const UNSPLASH_API_KEY = "..."; 형태로 되어 있어야 함
+  // ✅ [수정] Unsplash API 키를 여기에 직접 입력하세요. (예: const UNSPLASH_API_KEY = "YOUR_API_KEY";)
+  const UNSPLASH_API_KEY = "";
 
   const menuSearchTerms = {
     비빔밥: "bibimbap korean rice bowl",
@@ -166,13 +166,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
     illustrationDiv.style.display = "flex";
     illustrationDiv.innerHTML = `<div class="img-loading">🔍 사진 불러오는 중...</div>`;
+    
+    // ✅ [수정] API 키가 없을 경우 source.unsplash.com 사용
+    if (!UNSPLASH_API_KEY) {
+      const img = new Image();
+      const imgUrl = `https://source.unsplash.com/500x230/?${encodeURIComponent(searchTerm)}`;
+      img.onload = () => {
+        illustrationDiv.innerHTML = `<img src="${imgUrl}" alt="${menuName}" class="food-img">`;
+      };
+      img.onerror = () => {
+        illustrationDiv.innerHTML = `<div class="img-fallback">🍽️</div>`;
+      };
+      img.src = imgUrl;
+      return;
+    }
 
     try {
       const response = await fetch(
         `https://api.unsplash.com/search/photos?query=${encodeURIComponent(searchTerm)}&per_page=1&orientation=landscape`,
         {
           headers: {
-            // ✅ [수정 1] const 중복 선언 제거 - config.js의 변수 그대로 사용
             Authorization: `Client-ID ${UNSPLASH_API_KEY}`,
           },
         }
@@ -216,7 +229,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (isLoading) return;
     isLoading = true;
 
-    // ✅ [수정 2] 버튼 클릭 후 포커스 즉시 해제 → 눌린 것처럼 보이는 현상 방지
     recommendBtn.blur();
     recommendBtn.disabled = true;
 
@@ -262,7 +274,6 @@ document.addEventListener("DOMContentLoaded", () => {
       textP.textContent = selectedMenu;
       textP.classList.add("final-result");
 
-      // 이미지 로드는 버튼 잠금과 독립적으로 실행
       showFoodImage(selectedMenu);
 
       const buttonsWrapper = createActionButtons(selectedMenu);
@@ -270,7 +281,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       setTimeout(() => {
         buttonsWrapper.classList.add("show");
-        // ✅ isLoading 해제 및 버튼 복구 (이미지 완료 기다리지 않음)
         isLoading = false;
         recommendBtn.disabled = false;
       }, 300);
@@ -284,7 +294,7 @@ document.addEventListener("DOMContentLoaded", () => {
     buttonsWrapper.className = "action-buttons-wrapper";
 
     const naverSearchButton = document.createElement("a");
-    naverSearchButton.href = `https://search.naver.com/search.naver?query=${query}`;
+    naverSearchButton.href = `https://search.naver.com/search.naver?query=${query} 맛집`;
     naverSearchButton.target = "_blank";
     naverSearchButton.className = "action-btn naver-search-btn";
     naverSearchButton.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i> 네이버 검색`;
@@ -293,12 +303,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const maps = [
       {
         name: "Google",
-        url: `https://www.google.com/maps/search/?api=1&query=${query}${
+        url: `https://www.google.com/maps/search/?api=1&query=${query} 맛집${
           userLocation ? `&location=${userLocation.lat},${userLocation.lng}` : ""
         }`,
       },
-      { name: "Naver", url: `https://map.naver.com/v5/search/${query}` },
-      { name: "Kakao", url: `https://map.kakao.com/link/search/${query}` },
+      { name: "Naver", url: `https://map.naver.com/v5/search/${query} 맛집` },
+      { name: "Kakao", url: `https://map.kakao.com/link/search/${query} 맛집` },
     ];
 
     maps.forEach((map) => {
@@ -306,7 +316,8 @@ document.addEventListener("DOMContentLoaded", () => {
       button.href = map.url;
       button.target = "_blank";
       button.className = "action-btn map-btn";
-      button.innerHTML = `<i class="fa-solid fa-map-location-dot"></i> ${map.name} 지도`;
+      // ✅ [수정] 지도 버튼 이름 축약
+      button.innerHTML = `<i class="fa-solid fa-map-location-dot"></i> ${map.name}`;
       buttonsWrapper.appendChild(button);
     });
 
