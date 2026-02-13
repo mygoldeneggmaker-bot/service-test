@@ -67,9 +67,6 @@ document.addEventListener("DOMContentLoaded", () => {
     ],
   };
 
-  // ✅ [수정] Unsplash API 키를 여기에 직접 입력하세요. (예: const UNSPLASH_API_KEY = "YOUR_API_KEY";)
-  const UNSPLASH_API_KEY = "";
-
   const menuSearchTerms = {
     비빔밥: "bibimbap korean rice bowl",
     김치찌개: "kimchi stew korean",
@@ -130,6 +127,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeBtn = document.querySelector(".close-btn");
   const menuBoard = document.getElementById("menu-board");
 
+  // Firebase initialization
+  const firebaseConfig = {
+    apiKey: "AIzaSyBSK7jWzAgT2tFxwUobi_AWlh-U9T5_nUM",
+    authDomain: "what-to-eat-in-korea.firebaseapp.com",
+    projectId: "what-to-eat-in-korea",
+    storageBucket: "what-to-eat-in-korea.firebasestorage.app",
+    messagingSenderId: "792606031289",
+    appId: "1:792606031289:web:6e2a7190a0eee925698a68"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const functions = firebase.functions();
+
   navigator.geolocation.getCurrentPosition(
     (position) => {
       userLocation = {
@@ -166,42 +175,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     illustrationDiv.style.display = "flex";
     illustrationDiv.innerHTML = `<div class="img-loading">🔍 사진 불러오는 중...</div>`;
-    
-    // ✅ [수정] API 키가 없을 경우 source.unsplash.com 사용
-    if (!UNSPLASH_API_KEY) {
-      const img = new Image();
-      const imgUrl = `https://source.unsplash.com/500x230/?${encodeURIComponent(searchTerm)}`;
-      img.onload = () => {
-        illustrationDiv.innerHTML = `<img src="${imgUrl}" alt="${menuName}" class="food-img">`;
-      };
-      img.onerror = () => {
-        illustrationDiv.innerHTML = `<div class="img-fallback">🍽️</div>`;
-      };
-      img.src = imgUrl;
-      return;
-    }
 
+    const getFoodImage = functions.httpsCallable('getFoodImage');
     try {
-      const response = await fetch(
-        `https://api.unsplash.com/search/photos?query=${encodeURIComponent(searchTerm)}&per_page=1&orientation=landscape`,
-        {
-          headers: {
-            Authorization: `Client-ID ${UNSPLASH_API_KEY}`,
-          },
-        }
-      );
+      const result = await getFoodImage({ searchTerm: searchTerm });
+      const data = result.data;
 
-      if (!response.ok) {
-        throw new Error(`Unsplash API Error: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-
-      if (data.results && data.results.length > 0) {
-        const imgUrl = data.results[0].urls.regular;
-        const photographer = data.results[0].user.name;
-        const photographerUrl = data.results[0].user.links.html;
-
+      if (data && data.imgUrl) {
+        const { imgUrl, photographer, photographerUrl } = data;
         const img = new Image();
         img.onload = () => {
           illustrationDiv.innerHTML = `
@@ -220,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
         illustrationDiv.innerHTML = `<div class="img-fallback">🍽️</div>`;
       }
     } catch (error) {
-      console.error("이미지 로드 실패:", error);
+      console.error("Error calling getFoodImage function:", error);
       illustrationDiv.innerHTML = `<div class="img-fallback">🍽️</div>`;
     }
   }
@@ -316,7 +297,6 @@ document.addEventListener("DOMContentLoaded", () => {
       button.href = map.url;
       button.target = "_blank";
       button.className = "action-btn map-btn";
-      // ✅ [수정] 지도 버튼 이름 축약
       button.innerHTML = `<i class="fa-solid fa-map-location-dot"></i> ${map.name}`;
       buttonsWrapper.appendChild(button);
     });
