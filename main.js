@@ -127,16 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeBtn = document.querySelector(".close-btn");
   const menuBoard = document.getElementById("menu-board");
 
-  // Firebase initialization
-  const firebaseConfig = {
-    apiKey: "AIzaSyBSK7jWzAgT2tFxwUobi_AWlh-U9T5_nUM",
-    authDomain: "what-to-eat-in-korea.firebaseapp.com",
-    projectId: "what-to-eat-in-korea",
-    storageBucket: "what-to-eat-in-korea.firebasestorage.app",
-    messagingSenderId: "792606031289",
-    appId: "1:792606031289:web:6e2a7190a0eee925698a68"
-  };
-  firebase.initializeApp(firebaseConfig);
+  // Get the Firebase Functions instance
   const functions = firebase.functions();
 
   navigator.geolocation.getCurrentPosition(
