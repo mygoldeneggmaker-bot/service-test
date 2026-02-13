@@ -1,13 +1,17 @@
-const functions = require("firebase-functions");
+const { onCall } = require("firebase-functions/v2/https");
 const admin = require("firebase-admin");
 const axios = require("axios");
+const { defineString } = require("firebase-functions/params");
 
 admin.initializeApp();
 
-const UNSPLASH_API_KEY = "YjkjPM4nPFxqqZTFnmEwWZnnAcorMBVYXj3fvPSpGCM";
+// Define the Unsplash API key as a parameter
+const unsplashApiKey = defineString("UNSPLASH_API_KEY");
 
-exports.getFoodImage = functions.https.onCall(async (data, context) => {
-  const searchTerm = data.searchTerm;
+const serviceAccount = "what-to-eat-in-korea@appspot.gserviceaccount.com";
+
+exports.getFoodImage = onCall({ serviceAccount }, async (request) => {
+  const searchTerm = request.data.searchTerm;
   if (!searchTerm) {
     throw new functions.https.HttpsError(
       "invalid-argument",
@@ -22,7 +26,8 @@ exports.getFoodImage = functions.https.onCall(async (data, context) => {
       )}&per_page=1&orientation=landscape`,
       {
         headers: {
-          Authorization: `Client-ID ${UNSPLASH_API_KEY}`,
+          // Use the .value() method to access the parameter's value
+          Authorization: `Client-ID ${unsplashApiKey.value()}`,
         },
       }
     );

@@ -127,8 +127,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeBtn = document.querySelector(".close-btn");
   const menuBoard = document.getElementById("menu-board");
 
-  // Get the Firebase Functions instance
-  const functions = firebase.functions();
+  // Get the Firebase Functions instance for the 'us-central1' region
+  const functions = firebase.app().functions("us-central1");
 
   navigator.geolocation.getCurrentPosition(
     (position) => {
@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
     illustrationDiv.style.display = "flex";
     illustrationDiv.innerHTML = `<div class="img-loading">🔍 사진 불러오는 중...</div>`;
 
-    const getFoodImage = functions.httpsCallable('getFoodImage');
+    const getFoodImage = functions.httpsCallable("getFoodImage");
     try {
       const result = await getFoodImage({ searchTerm: searchTerm });
       const data = result.data;
