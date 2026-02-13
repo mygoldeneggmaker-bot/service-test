@@ -159,17 +159,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  async function showFoodImage(menuName) {
+  async function showFoodImage(menuName, category) {
     const searchTerm = menuSearchTerms[menuName]
       ? menuSearchTerms[menuName]
-      : `${menuName} food`;
+      : `${menuName} ${category}`;
 
     illustrationDiv.style.display = "flex";
     illustrationDiv.innerHTML = `<div class="img-loading">🔍 사진 불러오는 중...</div>`;
 
     const getFoodImage = functions.httpsCallable("getFoodImage");
     try {
-      const result = await getFoodImage({ searchTerm: searchTerm });
+      const result = await getFoodImage({ searchTerm: searchTerm, category: category });
       const data = result.data;
 
       if (data && data.imgUrl) {
@@ -205,13 +205,17 @@ document.addEventListener("DOMContentLoaded", () => {
     recommendBtn.disabled = true;
 
     let menuItems;
+    let categoryForSearch;
     if (currentCategory === "all") {
       const allExceptDessert = { ...menu };
       delete allExceptDessert.dessert;
       delete allExceptDessert.bunsik;
-      menuItems = Object.values(allExceptDessert).flat();
+      // Flatten the menu items and keep track of their categories
+      menuItems = Object.entries(allExceptDessert).flatMap(([category, items]) => 
+        items.map(item => ({ name: item, category }))
+      );
     } else {
-      menuItems = menu[currentCategory];
+      menuItems = menu[currentCategory].map(item => ({ name: item, category: currentCategory }));
     }
 
     if (!menuItems || menuItems.length === 0) {
@@ -221,7 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     let availableMenuItems = menuItems.filter(
-      (item) => !recommendationHistory[currentCategory].includes(item)
+      (item) => !recommendationHistory[currentCategory].includes(item.name)
     );
 
     if (availableMenuItems.length === 0) {
@@ -238,17 +242,17 @@ document.addEventListener("DOMContentLoaded", () => {
     recommendationArea.classList.add("show");
 
     setTimeout(() => {
-      const selectedMenu =
+      const selectedMenuItem =
         availableMenuItems[Math.floor(Math.random() * availableMenuItems.length)];
 
-      recommendationHistory[currentCategory].push(selectedMenu);
+      recommendationHistory[currentCategory].push(selectedMenuItem.name);
 
-      textP.textContent = selectedMenu;
+      textP.textContent = selectedMenuItem.name;
       textP.classList.add("final-result");
 
-      showFoodImage(selectedMenu);
+      showFoodImage(selectedMenuItem.name, selectedMenuItem.category);
 
-      const buttonsWrapper = createActionButtons(selectedMenu);
+      const buttonsWrapper = createActionButtons(selectedMenuItem.name);
       restaurantSearchArea.appendChild(buttonsWrapper);
 
       setTimeout(() => {
