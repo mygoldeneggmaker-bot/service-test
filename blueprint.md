@@ -24,7 +24,7 @@ This project is a web application designed to help users decide "What to eat tod
     *   Firebase Web SDK (App)
 *   **Backend:**
     *   Firebase (Hosting, potentially other services, but Cloud Functions for image fetching are removed)
-*   **Deployment/Hosting:** Firebase Hosting (implied by configuration)
+*   **Deployment/Hosting:** Cloudflare Pages
 
 ## Architecture
 
@@ -49,6 +49,10 @@ The application follows a client-server architecture:
 4.  **[DONE] Removed publicly exposed Firebase API Key from `index.html` for security reasons.**
 5.  **[DONE] Replaced all `menuImageMap` image URLs with a generic food placeholder image.**
     *   All entries in `menuImageMap` in `main.js` now point to `https://picsum.photos/seed/food/800/600`. This provides a consistent visual placeholder while awaiting specific curated images.
+6.  **[DONE] Updated README.md to reflect Cloudflare Pages deployment and removed Unsplash API references.**
+7.  **[DONE] Cleaned up `functions/index.js` by removing unused dependencies and comments.**
+8.  **[DONE] Created `.gitignore` to prevent committing unnecessary files like `node_modules`.**
+9.  **[DONE] Enhanced AI image generation prompt in `main.js` for better visual quality.**
 
 ## Security Note: Handling Compromised Google API Key
 

@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const menuImageMap = {
     // Korean Food Images
-    "비빔밥": "https://picsum.photos/seed/food/800/600",
+    "비빔밥": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Dolsot-bibimbap.jpg/800px-Dolsot-bibimbap.jpg",
     "김치찌개": "https://picsum.photos/seed/food/800/600",
     "된장찌개": "https://picsum.photos/seed/food/800/600",
     "불고기": "https://picsum.photos/seed/food/800/600",
@@ -415,8 +415,14 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function showFoodImage(menuName) { // Removed 'category' parameter as it's no longer used here
-    const imageUrl = menuImageMap[menuName] || "https://picsum.photos/seed/food/800/600"; // Generic food image fallback
-    const photographer = "Placeholder"; // Photographer credit can be generic if using curated images
+    let imageUrl = menuImageMap[menuName];
+
+    // 만약 이미지 URL이 기본 플레이스홀더(임시)라면, 메뉴 이름으로 AI 이미지를 생성해서 보여줍니다.
+    if (!imageUrl || imageUrl === "https://picsum.photos/seed/food/800/600") {
+      imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(menuName)}%20delicious%20food%20photography,%20cinematic%20lighting,%20high%20resolution,%20appetizing?width=800&height=600&nologo=true`;
+    }
+
+    const photographer = "Web/AI"; // Photographer credit can be generic if using curated images
     const photographerUrl = "#";
 
     illustrationDiv.style.display = "flex";
