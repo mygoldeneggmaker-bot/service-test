@@ -47,6 +47,8 @@ The application follows a client-server architecture:
     *   Removed Firebase Functions instance initialization from `main.js`.
     *   Removed the `getFoodImage` Cloud Function and `unsplashApiKey` from `functions/index.js`.
 4.  **[DONE] Removed publicly exposed Firebase API Key from `index.html` for security reasons.**
+5.  **[DONE] Replaced all `menuImageMap` image URLs with a generic food placeholder image.**
+    *   All entries in `menuImageMap` in `main.js` now point to `https://picsum.photos/seed/food/800/600`. This provides a consistent visual placeholder while awaiting specific curated images.
 
 ## Security Note: Handling Compromised Google API Key
 
@@ -77,6 +79,7 @@ A Google API key was found publicly exposed in the Git history of this repositor
 
 ## Future Enhancements (Potential)
 
+*   **User Provided Curated Images:** Allow the user to manually update the `menuImageMap` in `main.js` with direct image URLs for each food item.
 *   **User Authentication:** Allow users to save favorite menus or restaurant searches.
 *   **Admin Panel:** Manage menu items and categories via a simple interface.
 *   **More Sophisticated Recommendation Logic:** Implement a recommendation algorithm that learns user preferences.
