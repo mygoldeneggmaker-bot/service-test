@@ -1,80 +1,84 @@
-# Blueprint: 오늘 뭐 먹지? 웹 애플리케이션
+# Blueprint for "오늘 뭐 먹지? | 메뉴 추천 & 주변 맛집"
 
-## 1. 개요 (Overview)
+## Project Overview
 
-'오늘 뭐 먹지?'는 결정 장애를 겪는 사용자를 위해 간단한 버튼 클릭만으로 점심, 저녁 메뉴를 추천해주는 웹 애플리케이션입니다. 사용자는 원하는 음식 카테고리를 선택하거나 전체 메뉴 중에서 추천받을 수 있습니다. 메뉴 추천 후에는 관련 음식 이미지를 시각적으로 확인하고, 곧바로 네이버 검색이나 지도 앱(Google, Naver, Kakao)으로 연동하여 주변 맛집을 탐색할 수 있는 원스톱 서비스를 제공합니다.
+This project is a web application designed to help users decide "What to eat today?" by recommending a menu item and then assisting them in finding nearby restaurants for that item. It leverages a modern frontend (HTML, CSS, JavaScript) for an interactive user experience and now directly manages food images client-side.
 
-## 2. 프로젝트 상세 (Project Outline)
+## Features
 
-### Frontend (Client-Side)
+*   **Dynamic Menu Recommendation:** Users can get a random food recommendation based on selected categories.
+*   **Category Filtering:** Food recommendations can be filtered by various cuisines (Korean, Japanese, Chinese, Asian, European, American, Latin American, Middle Eastern, Bunsik, Dessert).
+*   **Curated Food Image Display:** For each recommended menu item, a relevant image is displayed from a curated client-side map, ensuring relevance and preventing duplicates.
+*   **Location-Based Restaurant Search:** Upon recommendation, users can search for nearby restaurants on Naver, Google Maps, or Kakao Maps, leveraging their current geolocation (if permitted).
+*   **Full Menu Board:** A modal displays a comprehensive list of all available menu items categorized by cuisine.
+*   **Responsive Design:** The application's layout adapts to different screen sizes, from mobile to desktop.
+*   **Firebase Integration:** Utilizes Firebase services (excluding image fetching via Cloud Functions).
+*   **Google AdSense Integration:** Includes AdSense for potential monetization.
 
--   **`index.html`**: 사용자가 직접 마주하는 기본 화면입니다.
-    -   **구조**: 헤더, 음식 카테고리 선택 버튼, 메인 추천 버튼(`#recommend-btn`), 그리고 추천 결과가 표시될 영역(`#recommendation-area`)으로 구성됩니다.
-    -   **외부 스크립트**: Google AdSense, Font Awesome(아이콘), Google Fonts(웹 폰트)가 CDN을 통해 연동되어 있습니다.
-    -   **모달 창**: 전체 메뉴를 한눈에 볼 수 있는 모달 창(`-menu-modal`)이 포함되어 있습니다.
+## Technologies Used
 
--   **`style.css`**: 애플리케이션의 전반적인 디자인과 사용자 경험(UX)을 담당합니다.
-    -   **디자인**: 깔끔하고 직관적인 UI를 중심으로, 동적인 효과(애니메이션)를 가미하여 사용자 경험을 향상시킵니다.
-    -   **반응형 웹**: 모바일, 태블릿, 데스크톱 등 다양한 화면 크기에 맞춰 레이아웃이 유연하게 변경되도록 설계되었습니다.
+*   **Frontend:**
+    *   HTML5
+    *   CSS3 (with modern features like Flexbox, Animations, Responsive Media Queries)
+    *   JavaScript (ES Modules, Async/Await, Fetch API)
+    *   Firebase Web SDK (App)
+*   **Backend:**
+    *   Firebase (Hosting, potentially other services, but Cloud Functions for image fetching are removed)
+*   **Deployment/Hosting:** Firebase Hosting (implied by configuration)
 
--   **`main.js`**: 애플리케이션의 핵심 로직을 담당하는 파일입니다.
-    -   **메뉴 데이터**: `menu` 객체 안에 한식, 중식, 일식 등 카테고리별로 음식 메뉴가 정리되어 있습니다.
-    -   **주요 기능**:
-        1.  **메뉴 추천 (`handleRecommendation`)**: 사용자가 선택한 카테고리(기본값: 'all') 내에서 랜덤으로 메뉴를 추천합니다. 단, 동일 카테고리 내에서 최근에 추천된 메뉴는 피하도록 `recommendationHistory`를 사용합니다.
-        2.  **이미지 요청 (`showFoodImage`)**: 메뉴가 추천되면, 해당 메뉴의 이름(`searchTerm`)과 카테고리(`category`) 정보를 **Firebase Cloud Function (`getFoodImage`)**으로 전달하여 음식 이미지를 요청합니다.
-        3.  **결과 표시**: Cloud Function으로부터 이미지 URL과 출처 정보를 받아 화면에 표시합니다. 이미지가 없을 경우, 대체 아이콘(🍽️)이 표시됩니다.
-        4.  **액션 버튼 생성 (`createActionButtons`)**: 추천된 메뉴 이름으로 네이버 맛집 검색, Google/Naver/Kakao 지도 검색으로 바로 연결되는 동적 버튼들을 생성합니다.
-    -   **위치 정보**: 브라우저의 `Geolocation API`를 사용하여 사용자의 현재 위치를 얻고, 이를 지도 검색 URL에 포함시켜 더 정확한 주변 맛집 정보를 제공합니다.
+## Architecture
 
-### Backend (Server-Side)
+The application follows a client-server architecture:
 
--   **`functions/index.js` (Firebase Cloud Functions)**: 서버 측 로직을 처리합니다.
-    -   **`getFoodImage` 함수**: 클라이언트의 요청에 따라 음식 이미지를 검색하여 반환하는 **2세대 `onCall` 함수**입니다.
-        -   **보안**: Unsplash API 키는 소스 코드에 직접 노출되지 않고, Firebase의 환경 변수 관리 기능(`defineString`)을 통해 안전하게 주입되고 관리됩니다.
-        -   **다단계 이미지 검색 로직**: 이미지 검색의 정확도와 성공률을 높이기 위해 다음과 같은 순차적 검색 로직을 사용합니다.
-            1.  **1단계 (가장 구체적)**: `음식 이름 + 카테고리 + food` (예: "파전 korean food")로 검색합니다.
-            2.  **2단계 (일반적)**: 1단계 실패 시, `음식 이름 + food` (예: "파전 food")로 재검색합니다.
-            3.  **3단계 (가장 광범위)**: 2단계도 실패 시, `카테고리 + food` (예: "korean food")로 검색하여 최소한 카테고리 관련 이미지를 보여주려 시도합니다.
-            4.  **최종 실패**: 모든 검색에 실패할 경우에만 `imgUrl: null`을 반환합니다.
+1.  **Client (Browser):**
+    *   `index.html` loads the UI, CSS, and `main.js`.
+    *   `main.js` handles all user interactions, manages the menu data, performs geolocation, and now directly accesses a curated `menuImageMap` for food images.
+    *   Firebase Web SDKs are used to interact with Firebase services (excluding image fetching via Cloud Functions).
+2.  **Firebase Cloud Functions (Server):**
+    *   The `getFoodImage` function has been removed as image fetching is now handled client-side using a curated image map.
 
-### 연동 정보 및 아키텍처 (Integrations & Architecture)
+## Iterative Development Plan (Current Task)
 
-1.  **Firebase**: 프로젝트의 핵심 백엔드 인프라입니다.
-    -   **Hosting**: `index.html`, `style.css`, `main.js` 등 정적 프론트엔드 파일을 호스팅합니다.
-    -   **Cloud Functions**: `getFoodImage` 함수를 실행하여 서버리스 백엔드 로직을 처리합니다.
-    -   **환경 변수**: 민감한 API 키(Unsplash API Key)를 안전하게 저장하고 함수 내에서 사용합니다.
+1.  **[DONE] Create `blueprint.md`:** Document the current project overview, features, technologies, and architecture.
+2.  **[DONE] Update `README.md`:** Replace the generic "starter template" description with an accurate overview of the "오늘 뭐 먹지?" application.
+3.  **[DONE] Implement curated image database for food items to ensure relevance and prevent duplicates.**
+    *   Replaced `menuSearchTerms` with `menuImageMap` in `main.js`.
+    *   Modified `showFoodImage` function in `main.js` to use `menuImageMap`.
+    *   Removed Firebase Functions instance initialization from `main.js`.
+    *   Removed the `getFoodImage` Cloud Function and `unsplashApiKey` from `functions/index.js`.
+4.  **[DONE] Removed publicly exposed Firebase API Key from `index.html` for security reasons.**
 
-2.  **Unsplash API**: `getFoodImage` Cloud Function 내부에서 호출되어 고품질의 음식 이미지를 검색하고 제공하는 역할을 합니다.
+## Security Note: Handling Compromised Google API Key
 
-3.  **Google AdSense**: `index.html`에 통합되어 광고를 표시하고, 이를 통해 잠재적인 수익 창출을 목표로 합니다.
+A Google API key was found publicly exposed in the Git history of this repository and within `index.html`. This poses a significant security risk.
 
-#### 데이터 흐름도 (Data Flow Diagram)
+**Immediate Actions Required:**
 
-```
-[사용자]        - (1. 메뉴 추천 버튼 클릭) -> [main.js]
-   ^
-   |                                         | (2. 추천 메뉴, 카테고리 정보와 함께)
-   (7. 추천 메뉴, 이미지, 액션 버튼 표시)         v
-   |
-[index.html] <-- (6. 이미지 URL, 출처 반환) -- [functions/index.js] (getFoodImage)
-                                                     |
-                                                     | (3. '음식+카테고리'로 검색)
-                                                     v
-                                                 [Unsplash API]
-                                                     |
-                                                     | (4. 검색 결과 반환)
-                                                     v
-                                                 [functions/index.js]
-                                                     |
-                                                     | (5. 이미지 URL 가공)
-                                                     v
-                                                 [main.js]
-```
+1.  **Regenerate the API Key:**
+    *   Go to your Google Cloud Console.
+    *   Navigate to "APIs & Services" > "Credentials".
+    *   Locate the compromised API Key (AIzaSyBSK7jWzAgT2tFxwUobi_AWlh-U9T5_nUM).
+    *   **Regenerate** the key. This will create a new key and invalidate the old one.
+2.  **Delete the Old API Key:** Once regenerated, **delete the compromised key** from your Google Cloud Console.
+3.  **Clean Git History:** The API key is still present in the Git history of the repository. To fully remove it, you will need to:
+    *   **Follow Google's instructions on handling compromised GCP credentials, specifically for removing sensitive data from Git history.** This typically involves using `git filter-repo` or `git filter-branch` to rewrite history. This is a complex operation and should be performed carefully, ideally in a new branch or repository.
+    *   **Example (conceptual - do NOT run without understanding):**
+        ```bash
+        git filter-repo --path index.html --invert-paths --force
+        # OR using git filter-branch (more complex)
+        # git filter-branch --index-filter 'git rm --cached --ignore-unmatch index.html' HEAD
+        # git filter-branch --tree-filter 'sed -i "" -e "/apiKey: \"AIzaSyBSK7jWzAgT2tFxwUobi_AWlh-U9T5_nUM\"/d" index.html' HEAD
+        ```
+        **Seriously, refer to official guides for proper Git history rewriting.**
+4.  **Review API Key Usage:**
+    *   **Determine if an API key is genuinely required client-side** for any remaining Firebase services your application uses (e.g., Firebase Authentication, Firestore, etc.).
+    *   If a client-side API key is needed, **create a new, highly restricted API key** in Google Cloud Console. Apply strong API restrictions (only allow access to specific APIs) and Application restrictions (HTTP referrers, if applicable, to limit usage to your domain).
+    *   Consider **proxying all API requests through a backend server** to completely hide API keys from the client.
 
-## 3. 최근 변경 계획 (Current Task Plan)
+## Future Enhancements (Potential)
 
--   **완료된 작업**:
-    1.  **이미지 검색 정확도 개선**: 단일 키워드 검색 방식에서 벗어나, 음식 이름과 카테고리를 조합하는 다단계 검색 로직을 도입하여 이미지의 관련성과 검색 성공률을 대폭 향상시켰습니다.
-    2.  **프로젝트 문서화**: 미래의 유지보수 및 협업을 위해 `blueprint.md` 파일을 생성하고 애플리케이션의 전체적인 구조, 기능, 연동 정보를 상세히 기록했습니다.
-
--   **향후 계획**: (현재 없음)
+*   **User Authentication:** Allow users to save favorite menus or restaurant searches.
+*   **Admin Panel:** Manage menu items and categories via a simple interface.
+*   **More Sophisticated Recommendation Logic:** Implement a recommendation algorithm that learns user preferences.
+*   **Integration with more Map/Restaurant APIs:** Expand options for finding restaurants.
+*   **PWA Features:** Add offline capabilities and installability.

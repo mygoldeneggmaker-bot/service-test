@@ -1,1 +1,27 @@
-A simple HTML/JS/CSS starter template
+# 오늘 뭐 먹지? | 메뉴 추천 & 주변 맛집
+
+"오늘 뭐 먹지?"는 사용자가 고민 없이 오늘의 메뉴를 선택하고, 선택된 메뉴에 대한 정보를 얻어 주변 맛집을 쉽게 찾을 수 있도록 돕는 웹 애플리케이션입니다.
+
+## 주요 기능
+
+*   **메뉴 추천:** 다양한 카테고리(한식, 일식, 중식 등)에서 랜덤으로 메뉴를 추천받을 수 있습니다.
+*   **음식 이미지 제공:** 추천된 메뉴에 대한 시각적인 정보를 위해 Unsplash에서 관련 이미지를 자동으로 찾아 보여줍니다.
+*   **주변 맛집 검색:** 추천된 메뉴를 기반으로 네이버, 구글 지도, 카카오 지도에서 주변 맛집을 바로 검색할 수 있습니다 (사용자 위치 정보 동의 시).
+*   **전체 메뉴판:** 모든 메뉴 항목을 카테고리별로 모아 볼 수 있는 메뉴판 기능을 제공합니다.
+*   **반응형 디자인:** 모바일 및 데스크톱 환경에서 최적화된 사용자 경험을 제공합니다.
+
+## 기술 스택
+
+*   **프론트엔드:** HTML5, CSS3, JavaScript (ES Modules), Firebase Web SDK
+*   **백엔드:** Firebase Cloud Functions (Node.js), Unsplash API
+*   **배포:** Firebase Hosting
+
+## 시작하기
+
+1.  프로젝트를 클론합니다.
+2.  Firebase 프로젝트를 설정하고 필요한 환경 변수(예: Unsplash API Key)를 Firebase Functions에 구성합니다.
+3.  `firebase deploy` 명령어를 사용하여 Firebase Hosting 및 Functions를 배포합니다.
+
+## 개발 환경
+
+*   이 프로젝트는 Firebase Studio 환경에 최적화되어 있습니다.
